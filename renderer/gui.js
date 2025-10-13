@@ -355,6 +355,7 @@ function resetStageStatuses(){
     ttmToggle = false;
     ttcToggle = false;
     rrToggle = false;
+    writeStageStrikingVisualizer();
 }
 
 function toggleStageStrikingMenu(){

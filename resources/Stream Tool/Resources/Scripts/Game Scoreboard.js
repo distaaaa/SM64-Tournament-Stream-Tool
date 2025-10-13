@@ -12,7 +12,6 @@ let p2ScorePrev, p2wlPrev;
 let bestOfPrev;
 let timerTogglePrev;
 
-
 //
 let p1Pic, p1PicPrev;
 let p2Pic, p2PicPrev;
@@ -239,6 +238,9 @@ async function getData(scInfo, stageInfo) {
 
 		gsap.to("#overlayTimer", {y: -pMove, opacity: 0, ease: "power1.in", duration: fadeOutTime, onComplete: timerMoved});
 			function timerMoved() {
+				//change the thing!
+				//updateTimer(p1WL, 1);
+				//move it back!
 				if (timerToggle != false) {
 					gsap.to("#overlayTimer", {delay: .3, y: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 				} else {
@@ -250,7 +252,6 @@ async function getData(scInfo, stageInfo) {
 
 	//now things that will happen constantly
 	else {
-		//console.log(displayStageStriker);
 		if(displayStageStriker){
 			gsap.to("#stageStriker", {display: 'block', opacity: 1, duration: fadeInTime});
 		} else {
@@ -258,6 +259,8 @@ async function getData(scInfo, stageInfo) {
 				document.getElementById('stageStriker').style.display = 'none';
 			}});
 		}
+		// resizeText(document.getElementById(timerWrapper));
+		//player 1 time!
 		if (document.getElementById('p1Name').textContent != p1Name ||
 			document.getElementById('p1Team').textContent != p1Team) {
 			//move and fade out the player 1's text
@@ -269,11 +272,119 @@ async function getData(scInfo, stageInfo) {
 			});
 		}
 
+		const bobImg = document.getElementById('bob').querySelector('img');
+		if (bob) {
+			gsap.to(bobImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(bobImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const wfImg = document.getElementById('wf').querySelector('img');
+		if (wf) {
+			gsap.to(wfImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(wfImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const jrbImg = document.getElementById('jrb').querySelector('img');
+		if (jrb) {
+			gsap.to(jrbImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(jrbImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const ccmImg = document.getElementById('ccm').querySelector('img');
+		if (ccm) {
+			gsap.to(ccmImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(ccmImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const bbhImg = document.getElementById('bbh').querySelector('img');
+		if (bbh) {
+			gsap.to(bbhImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(bbhImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const hmcImg = document.getElementById('hmc').querySelector('img');
+		if (hmc) {
+			gsap.to(hmcImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(hmcImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const lllImg = document.getElementById('lll').querySelector('img');
+		if (lll) {
+			gsap.to(lllImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(lllImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const sslImg = document.getElementById('ssl').querySelector('img');
+		if (ssl) {
+			gsap.to(sslImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(sslImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const dddImg = document.getElementById('ddd').querySelector('img');
+		if (ddd) {
+			gsap.to(dddImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(dddImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const slImg = document.getElementById('sl').querySelector('img');
+		if (sl) {
+			gsap.to(slImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(slImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const wdwImg = document.getElementById('wdw').querySelector('img');
+		if (wdw) {
+			gsap.to(wdwImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(wdwImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const ttmImg = document.getElementById('ttm').querySelector('img');
+		if (ttm) {
+			gsap.to(ttmImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(ttmImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const thiImg = document.getElementById('thi').querySelector('img');
+		if (thi) {
+			gsap.to(thiImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(thiImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const ttcImg = document.getElementById('ttc').querySelector('img');
+		if (ttc) {
+			gsap.to(ttcImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(ttcImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+
+		const rrImg = document.getElementById('rr').querySelector('img');
+		if (rr) {
+			gsap.to(rrImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
+		} else {
+			gsap.to(rrImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
+		}
+		
+
 		//player 1's character portrait change
 		if (p1PicPrev != p1Pic) {
-			//fade out the images while also moving them
+			//fade out the images while also moving them because that always looks cool
 			fadeOutPic("#p1PlayerPic", 0, async () => {
-				updatePlayerPic('p1PlayerPic', 1);
+				//now that nobody can see them, lets change the images!
+				updatePlayerPic('p1PlayerPic', 1); //will return scale
+				//and now, fade them in
 				fadeInPic("#p1PlayerPic");
 			});
 			p1PicPrev = p1Pic;
@@ -282,6 +393,9 @@ async function getData(scInfo, stageInfo) {
 		if(timerTogglePrev != timerToggle){
 			gsap.to("#overlayTimer", {y: -pMove, opacity: 0, ease: "power1.in", duration: fadeOutTime, onComplete: timerMoved});
 			function timerMoved() {
+				//change the thing!
+				//updateTimer(p1WL, 1);
+				//move it back!
 				if (timerToggle != false) {
 					gsap.to("#overlayTimer", {delay: .3, y: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 				} else {
@@ -295,7 +409,9 @@ async function getData(scInfo, stageInfo) {
 			//move it away!
 			gsap.to("#wlP1", {x: -pMove, opacity: 0, ease: "power1.in", duration: fadeOutTime, onComplete: pwlMoved});
 			function pwlMoved() {
+				//change the thing!
 				updateWL(p1WL, 1);
+				//move it back!
 				if (p1WL != "Nada") {
 					gsap.to("#wlP1", {delay: .3, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 				} else {
@@ -312,6 +428,7 @@ async function getData(scInfo, stageInfo) {
 			p1ScorePrev = p1Score;
 		}
 
+		//did you pay attention earlier? Well, this is the same as player 1!
 		if (document.getElementById('p2Name').textContent != p2Name ||
 			document.getElementById('p2Team').textContent != p2Team){
 			fadeOutMove("#p2Wrapper", pMove, () => {
@@ -323,8 +440,11 @@ async function getData(scInfo, stageInfo) {
 
 		//player 2's character portrait change
 		if (p2PicPrev != p2Pic) {
+			//fade out the images while also moving them because that always looks cool
 			fadeOutPic("#p2PlayerPic", 0, async () => {
-				updatePlayerPic('p2PlayerPic', 2);
+				//now that nobody can see them, lets change the images!
+				updatePlayerPic('p2PlayerPic', 2); //will return scale
+				//and now, fade them in
 				fadeInPic("#p2PlayerPic");
 			});
 			p2PicPrev = p2Pic;
