@@ -499,6 +499,28 @@
                 font-family: "SUPERMARIO64SIGNFONT-Bold";
                 font-size: 40px
             }
+
+            #backgroundPart {
+                opacity: .9;
+            }
+
+            #actualStageStriker {
+                align-self: center;
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 20px;
+                width: 60%;
+                height: auto;
+                margin: auto;
+                /* padding: 10px; */
+            }
+
+            .stage {
+                position: relative;
+                width: 250px;
+                height: 250px;
+                opacity: 1;
+            }
       
             @keyframes animate {
     
@@ -520,6 +542,7 @@
         </style>
     </head>
     <body>
+        
         <div id ="theBackground" class="area">
             <ul class="circles" id="circles">
                 <li></li>
@@ -704,7 +727,58 @@
                 <span id="timer" class="timer">0</span>
             </span>
         </div>    
-
+        <div id="stageStriker" class="scoreTick">
+            <svg width="1920" id="backgroundPart" height="1080" color="black" class="absol">
+                <polygon points="0,0 0,1080 1920,1080 1920,0"/>
+            </svg>
+            <div id="actualStageStriker">
+                <div id="bob" title="Bob-omb Battlefield">
+                    <img src="Resources/Overlay/Stage-Icons/1.png" alt="BOB" class="stage">
+                </div>
+                <div id="wf" title="Whomp's Fortress">
+                    <img src="Resources/Overlay/Stage-Icons/2.png" alt="WF" class="stage">
+                </div>
+                <div id="jrb" title="Jolly Roger Bay">
+                    <img src="Resources/Overlay/Stage-Icons/3.png" alt="JRB" class="stage">
+                </div>
+                <div id="ccm" title="Cool, Cool Mountain">
+                    <img src="Resources/Overlay/Stage-Icons/4.png" alt="CCM" class="stage">
+                </div>
+                <div id="bbh" title="Big Boo's Haunt">
+                    <img src="Resources/Overlay/Stage-Icons/5.png" alt="BBH" class="stage">
+                </div>
+                <div id="hmc" title="Hazy Maze Cave>">
+                    <img src="Resources/Overlay/Stage-Icons/6.png" alt="HMC" class="stage">
+                </div>
+                <div id="lll" title="Lethal Lava Land">
+                    <img src="Resources/Overlay/Stage-Icons/7.png" alt="LLL" class="stage">
+                </div>
+                <div id="ssl" title="Shifting Sand Land">
+                    <img src="Resources/Overlay/Stage-Icons/8.png" alt="SSL" class="stage">
+                </div>
+                <div id="ddd" title="Dire, Dire Docks">
+                    <img src="Resources/Overlay/Stage-Icons/9.png" alt="DDD" class="stage">
+                </div>
+                <div id="sl" title="Snowman's Land">
+                    <img src="Resources/Overlay/Stage-Icons/10.png" alt="SL" class="stage">
+                </div>
+                <div id="wdw" title="Wet-Dry World">
+                    <img src="Resources/Overlay/Stage-Icons/11.png" alt="WDW" class="stage">
+                </div>
+                <div id="thi" title="Tiny-Huge Island">
+                    <img src="Resources/Overlay/Stage-Icons/12.png" alt="THI" class="stage">
+                </div>
+                <div id="ttm" title="Tall, Tall Mountain">
+                    <img src="Resources/Overlay/Stage-Icons/13.png" alt="TTM" class="stage">
+                </div>
+                <div id="ttc" title="Tick Tock Clock">
+                    <img src="Resources/Overlay/Stage-Icons/14.png" alt="TTC" class="stage">
+                </div>
+                <div id="rr" title="Rainbow Ride">
+                    <img src="Resources/Overlay/Stage-Icons/15.png" alt="RR" class="stage">
+                </div>
+            </div>
+        </div>
         <script src="Resources/Scripts/Background.js"></script>
     </body>
 </html>

@@ -12,6 +12,7 @@ let p2ScorePrev, p2wlPrev;
 let bestOfPrev;
 let timerTogglePrev;
 
+
 //
 let p1Pic, p1PicPrev;
 let p2Pic, p2PicPrev;
@@ -52,7 +53,8 @@ window.onload = init;
 function init() {
 	async function mainLoop() {
 		const scInfo = await getInfo();
-		getData(scInfo);
+		const stageInfo = await getStageInfo();
+		getData(scInfo, stageInfo);
 	}
 
 	mainLoop();
@@ -60,7 +62,7 @@ function init() {
 	
 }
 
-async function getData(scInfo) {
+async function getData(scInfo, stageInfo) {
 	let p1Name = scInfo['p1Name'];
 	let p1Team = scInfo['p1Team'];
 	let p1Score = scInfo['p1Score'];
@@ -100,6 +102,23 @@ async function getData(scInfo) {
 	let p2Pic = scInfo['p2Pic'];
 
 	let timerToggle = scInfo['timerStatus'];
+
+	let displayStageStriker = stageInfo['displayVisualizer'];
+	let bob = stageInfo['bob'];
+	let wf = stageInfo['wf'];
+	let jrb = stageInfo['jrb'];
+	let ccm = stageInfo['ccm'];
+	let bbh = stageInfo['bbh'];
+	let hmc = stageInfo['hmc'];
+	let lll = stageInfo['lll'];
+	let ssl = stageInfo['ssl'];
+	let ddd = stageInfo['ddd'];
+	let sl = stageInfo['sl'];
+	let wdw = stageInfo['wdw'];
+	let thi = stageInfo['thi'];
+	let ttm = stageInfo['ttm'];
+	let ttc = stageInfo['ttc'];
+	let rr = stageInfo['rr'];
 
 
 	//first, things that will happen only the first time the html loads
@@ -220,9 +239,6 @@ async function getData(scInfo) {
 
 		gsap.to("#overlayTimer", {y: -pMove, opacity: 0, ease: "power1.in", duration: fadeOutTime, onComplete: timerMoved});
 			function timerMoved() {
-				//change the thing!
-				//updateTimer(p1WL, 1);
-				//move it back!
 				if (timerToggle != false) {
 					gsap.to("#overlayTimer", {delay: .3, y: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 				} else {
@@ -234,8 +250,14 @@ async function getData(scInfo) {
 
 	//now things that will happen constantly
 	else {
-		// resizeText(document.getElementById(timerWrapper));
-		//player 1 time!
+		//console.log(displayStageStriker);
+		if(displayStageStriker){
+			gsap.to("#stageStriker", {display: 'block', opacity: 1, duration: fadeInTime});
+		} else {
+			gsap.to("#stageStriker", {opacity: 0, duration: fadeOutTime, onComplete: () => {
+				document.getElementById('stageStriker').style.display = 'none';
+			}});
+		}
 		if (document.getElementById('p1Name').textContent != p1Name ||
 			document.getElementById('p1Team').textContent != p1Team) {
 			//move and fade out the player 1's text
@@ -249,11 +271,9 @@ async function getData(scInfo) {
 
 		//player 1's character portrait change
 		if (p1PicPrev != p1Pic) {
-			//fade out the images while also moving them because that always looks cool
+			//fade out the images while also moving them
 			fadeOutPic("#p1PlayerPic", 0, async () => {
-				//now that nobody can see them, lets change the images!
-				updatePlayerPic('p1PlayerPic', 1); //will return scale
-				//and now, fade them in
+				updatePlayerPic('p1PlayerPic', 1);
 				fadeInPic("#p1PlayerPic");
 			});
 			p1PicPrev = p1Pic;
@@ -262,9 +282,6 @@ async function getData(scInfo) {
 		if(timerTogglePrev != timerToggle){
 			gsap.to("#overlayTimer", {y: -pMove, opacity: 0, ease: "power1.in", duration: fadeOutTime, onComplete: timerMoved});
 			function timerMoved() {
-				//change the thing!
-				//updateTimer(p1WL, 1);
-				//move it back!
 				if (timerToggle != false) {
 					gsap.to("#overlayTimer", {delay: .3, y: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 				} else {
@@ -278,9 +295,7 @@ async function getData(scInfo) {
 			//move it away!
 			gsap.to("#wlP1", {x: -pMove, opacity: 0, ease: "power1.in", duration: fadeOutTime, onComplete: pwlMoved});
 			function pwlMoved() {
-				//change the thing!
 				updateWL(p1WL, 1);
-				//move it back!
 				if (p1WL != "Nada") {
 					gsap.to("#wlP1", {delay: .3, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 				} else {
@@ -297,7 +312,6 @@ async function getData(scInfo) {
 			p1ScorePrev = p1Score;
 		}
 
-		//did you pay attention earlier? Well, this is the same as player 1!
 		if (document.getElementById('p2Name').textContent != p2Name ||
 			document.getElementById('p2Team').textContent != p2Team){
 			fadeOutMove("#p2Wrapper", pMove, () => {
@@ -309,11 +323,8 @@ async function getData(scInfo) {
 
 		//player 2's character portrait change
 		if (p2PicPrev != p2Pic) {
-			//fade out the images while also moving them because that always looks cool
 			fadeOutPic("#p2PlayerPic", 0, async () => {
-				//now that nobody can see them, lets change the images!
-				updatePlayerPic('p2PlayerPic', 2); //will return scale
-				//and now, fade them in
+				updatePlayerPic('p2PlayerPic', 2);
 				fadeInPic("#p2PlayerPic");
 			});
 			p2PicPrev = p2Pic;
@@ -581,7 +592,7 @@ function updateBorder(bestOf) {
 	bestOfPrev = bestOf
 }
 
-//the logic behind the twitter/twitch constant change
+//the logic behind the bluesky/twitch constant change
 function socialChange1(blueskyWrapperID, twitchWrapperID) {
 
 	const blueskyWrapperEL = document.getElementById(blueskyWrapperID);
@@ -593,7 +604,7 @@ function socialChange1(blueskyWrapperID, twitchWrapperID) {
 		if (!bluesky1 && !twitch1) { //if all blank
 			blueskyWrapperEL.style.opacity = 0;
 			twitchWrapperEL.style.opacity = 0;
-		} else if (!bluesky1 && !!twitch1) { //if twitter blank
+		} else if (!bluesky1 && !!twitch1) { //if bsky blank
 			blueskyWrapperEL.style.opacity = 0;
 			twitchWrapperEL.style.opacity = 1;
 		} else {
@@ -846,6 +857,20 @@ function getInfo() {
 	//i would gladly have used fetch, but OBS local files wont support that :(
 }
 
+function getStageInfo() {
+	return new Promise(function (resolve) {
+		const oReq = new XMLHttpRequest();
+		oReq.addEventListener("load", reqListener);
+		oReq.open("GET", 'Resources/Texts/StageStrikingInfo.json');
+		oReq.send();
+
+		//will trigger when file loads
+		function reqListener () {
+			resolve(JSON.parse(oReq.responseText))
+		}
+	})
+}
+
 async function updatePlayerPic(picID, n) {
     const charEL = document.getElementById(picID);
     let src = 'Resources/Player Icons/p' + n + '.png';
@@ -961,7 +986,7 @@ function stopTimer() {
 
 // reset timer
 function resetTimer(){
-	console.log('reset called');
+	// console.log('reset called');
 	clearInterval(timer);
 	isRunning = false;
 	countedDown = false;

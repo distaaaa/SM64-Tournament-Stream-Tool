@@ -1,5 +1,5 @@
 {
-  "displayVisualizer": false,
+  "displayVisualizer": true,
   "bob": false,
   "wf": false,
   "jrb": false,
@@ -8,8 +8,8 @@
   "hmc": false,
   "lll": false,
   "ssl": false,
-  "ddd": true,
-  "sl": true,
+  "ddd": false,
+  "sl": false,
   "wdw": false,
   "thi": false,
   "ttm": false,
