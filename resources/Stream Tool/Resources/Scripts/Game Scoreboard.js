@@ -23,12 +23,6 @@ function applyBackgroundTheme(theme) {
 	const alreadyHasRequested = (theme && appliedThemes.length === 1 && appliedThemes[0] === theme) || (!theme && appliedThemes.length === 0);
 	if (alreadyHasRequested) return;
 
-	// Crossfade to the new theme using a cloned overlay element so we don't abruptly remove classes on the original.
-	// Steps:
-	// 1. Create a clone of theBackground, insert it on top, and apply the new theme to the clone.
-	// 2. Fade the clone in while fading the original out.
-	// 3. When animation completes, remove all stage classes from theBackground, add the requested theme,
-	//    remove the clone, and ensure original opacity is restored.
 
 	// create the clone
 	const clone = theBackground.cloneNode(true);
@@ -157,17 +151,13 @@ async function getData(scInfo, stageInfo) {
 	let p1Name = scInfo['p1Name'];
 	let p1Team = scInfo['p1Team'];
 	let p1Score = scInfo['p1Score'];
-	// let p1Color = scInfo['p1Color'];
-	// let p1Character = scInfo['p1Character'];
-	// let p1Skin = scInfo['p1Skin'];
+
 	let p1WL = scInfo['p1WL'];
 	
 	let p2Name = scInfo['p2Name'];
 	let p2Team = scInfo['p2Team'];
 	let p2Score = scInfo['p2Score'];
-	// let p2Color = scInfo['p2Color'];
-	// let p2Character = scInfo['p2Character'];
-	// let p2Skin = scInfo['p2Skin'];
+
 	let p2WL = scInfo['p2WL'];
 
 	let tournament = scInfo['tournamentName']
@@ -182,13 +172,6 @@ async function getData(scInfo, stageInfo) {
 	twitch2 = scInfo['caster2Twitch'];
 
 	let theme = scInfo['theme'];
-
-	// let caster1 = "";
-	// bluesky1 = "";
-	// twitch1 = "";
-	// let caster2 = "";
-	// bluesky2 = "";
-	// twitch2 = "";
 
 	// Player Pic Info
 	let p1Pic = scInfo['p1Pic'];
@@ -234,17 +217,12 @@ async function getData(scInfo, stageInfo) {
 
 		//set the current score
 		updateScore(1, p1Score);
-		//play a sick animation for the score ticks
 		moveScoresIntro(1, bestOf, p1WL, sMove);
-		//yeah same thing here
+
 		p1ScorePrev = p1Score;
 
-		//set the color
-		// updateColor('p1Color', 'p1Name', p1Color);
-		// p1ColorPrev = p1Color;
 
 		resizeText(document.getElementById('timerWrapper'));
-		// took notes from player 1? well, this is exactly the same!
 		updatePlayerName('p2Wrapper', 'p2Name', 'p2Team', p2Name, p2Team);
 		gsap.fromTo("#p2Wrapper", 
 			{x: pMove},
@@ -332,9 +310,6 @@ async function getData(scInfo, stageInfo) {
 
 		gsap.to("#overlayTimer", {y: -pMove, opacity: 0, ease: "power1.in", duration: fadeOutTime, onComplete: timerMoved});
 			function timerMoved() {
-				//change the thing!
-				//updateTimer(p1WL, 1);
-				//move it back!
 				if (timerToggle != false) {
 					gsap.to("#overlayTimer", {delay: .3, y: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 				} else {
@@ -355,7 +330,6 @@ async function getData(scInfo, stageInfo) {
 			}});
 		}
 		// resizeText(document.getElementById(timerWrapper));
-		//player 1 time!
 		if (document.getElementById('p1Name').textContent != p1Name ||
 			document.getElementById('p1Team').textContent != p1Team) {
 			fadeOutMove("#p1Wrapper", -pMove, () => {
@@ -363,10 +337,10 @@ async function getData(scInfo, stageInfo) {
 				fadeInMove("#p1Wrapper");
 			});
 		}
-		const bobImg = document.getElementById('bob').querySelector('img');
+		
 		// ensure only the requested stage theme is applied — clear other stage classes first
 		applyBackgroundTheme(theme);
-		
+		const bobImg = document.getElementById('bob').querySelector('img');
 		if (bob) {
 			gsap.to(bobImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
@@ -460,11 +434,8 @@ async function getData(scInfo, stageInfo) {
 
 		//player 1's character portrait change
 		if (p1PicPrev != p1Pic) {
-			//fade out the images while also moving them because that always looks cool
 			fadeOutPic("#p1PlayerPic", 0, async () => {
-				//now that nobody can see them, lets change the images!
 				updatePlayerPic('p1PlayerPic', 1); //will return scale
-				//and now, fade them in
 				fadeInPic("#p1PlayerPic");
 			});
 			p1PicPrev = p1Pic;
@@ -473,9 +444,6 @@ async function getData(scInfo, stageInfo) {
 		if(timerTogglePrev != timerToggle){
 			gsap.to("#overlayTimer", {y: -pMove, opacity: 0, ease: "power1.in", duration: fadeOutTime, onComplete: timerMoved});
 			function timerMoved() {
-				//change the thing!
-				//updateTimer(p1WL, 1);
-				//move it back!
 				if (timerToggle != false) {
 					gsap.to("#overlayTimer", {delay: .3, y: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 				} else {
@@ -486,12 +454,9 @@ async function getData(scInfo, stageInfo) {
 		}
 		//the [W] and [L] status for grand finals
 		if (p1wlPrev != p1WL) {
-			//move it away!
 			gsap.to("#wlP1", {x: -pMove, opacity: 0, ease: "power1.in", duration: fadeOutTime, onComplete: pwlMoved});
 			function pwlMoved() {
-				//change the thing!
 				updateWL(p1WL, 1);
-				//move it back!
 				if (p1WL != "Nada") {
 					gsap.to("#wlP1", {delay: .3, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 				} else {
@@ -508,7 +473,6 @@ async function getData(scInfo, stageInfo) {
 			p1ScorePrev = p1Score;
 		}
 
-		//did you pay attention earlier? Well, this is the same as player 1!
 		if (document.getElementById('p2Name').textContent != p2Name ||
 			document.getElementById('p2Team').textContent != p2Team){
 			fadeOutMove("#p2Wrapper", pMove, () => {
@@ -520,11 +484,8 @@ async function getData(scInfo, stageInfo) {
 
 		//player 2's character portrait change
 		if (p2PicPrev != p2Pic) {
-			//fade out the images while also moving them because that always looks cool
 			fadeOutPic("#p2PlayerPic", 0, async () => {
-				//now that nobody can see them, lets change the images!
-				updatePlayerPic('p2PlayerPic', 2); //will return scale
-				//and now, fade them in
+				updatePlayerPic('p2PlayerPic', 2); 
 				fadeInPic("#p2PlayerPic");
 			});
 			p2PicPrev = p2Pic;
@@ -741,13 +702,6 @@ async function getData(scInfo, stageInfo) {
 		}
 	}
 }
-
-
-// //did an image fail to load? this will be used to show nothing
-// function showNothing(itemEL) {
-// 	itemEL.setAttribute('src', '../Resources/Literally Nothing.png');
-// }
-
 
 //score change, pretty simple
 function updateScore(pNum, pScore) {
@@ -1054,7 +1008,6 @@ function getInfo() {
 			resolve(JSON.parse(oReq.responseText))
 		}
 	})
-	//i would gladly have used fetch, but OBS local files wont support that :(
 }
 
 function getStageInfo() {

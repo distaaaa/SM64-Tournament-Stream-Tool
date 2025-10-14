@@ -30,17 +30,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // debounce timer id
     let themeDebounce = null;
-
-    // try to load up to `maxIcons` images from the given theme folder (1..maxIcons)
-    // resolves with array of valid paths (may be empty)
-    // Try to load up to `maxIcons` images for a given theme. If none are
-    // found in the theme subfolder (e.g. "Stage-Icons/area/..."), fall back
-    // to the top-level icons inside `Resources/Overlay/Stage-Icons/<i>.png`.
     function loadIconsForTheme(theme, maxIcons = 7) {
         if (!theme) return Promise.resolve([]);
         if (themeCache.has(theme)) return Promise.resolve(themeCache.get(theme));
 
-        // Helper that checks an array of src paths and returns the ones that exist
         const checkPaths = (paths) => {
             const checks = paths.map(src => new Promise(resolve => {
                 const img = new Image();
@@ -76,16 +69,12 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // decide icon for a single circle element (random pick)
+    // decide icon for a single circle element
     function pickIconFor(setIcons) {
         const set = setIcons && setIcons.length ? setIcons : DEFAULT_ICONS;
         return set[Math.floor(Math.random() * set.length)];
     }
 
-    // apply icons array to the .circles li elements.
-    // Behavior change: on initial load, set every circle's icon. On subsequent theme updates,
-    // only assign icons to circles that are off-screen (starting near bottom) so visible
-    // icons already animating do not instantly swap.
     function applyIcons(icons, { forceAll = false } = {}) {
         if (!circles || circles.length === 0) return;
         const setIcons = icons && icons.length ? icons : DEFAULT_ICONS;
@@ -95,8 +84,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         circles.forEach(circle => {
             try {
-                // if forceAll, always set; otherwise only set if the circle appears off-screen
-                // (i.e., positioned near/below starting bottom) or is fully transparent
                 if (forceAll) {
                     circle.style.backgroundImage = `url(${pickIconFor(setIcons)})`;
                     return;
@@ -109,15 +96,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (isOffscreenStart || isInvisible) {
                     circle.style.backgroundImage = `url(${pickIconFor(setIcons)})`;
                 }
-                // otherwise leave the current backgroundImage alone so it doesn't abruptly swap
             } catch (e) {
-                // if any error reading geometry, fall back to setting the icon
                 circle.style.backgroundImage = `url(${pickIconFor(setIcons)})`;
             }
         });
     }
 
-    // examine current classes on #theBackground and attempt to find a matching theme folder
     async function updateIconsForCurrentTheme() {
         const bg = document.getElementById('theBackground');
         if (!bg) {
@@ -127,26 +111,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const classList = Array.from(bg.classList);
 
-        // only consider classes that correspond to known stage theme folders
         const candidates = classList.filter(c => STAGE_THEMES.includes(c));
 
-        // try each candidate class name (in order) to see if that folder contains icons
         for (const cls of candidates) {
             try {
                 const icons = await loadIconsForTheme(cls);
                 if (icons && icons.length > 0) {
                     lastLoadedIcons = icons.slice();
-                    // on startup, force all; otherwise only offscreen/invisible ones will update and
-                    // animationiteration handlers (see below) will ensure newly popping icons use lastLoadedIcons
+
                     applyIcons(icons, { forceAll: false });
                     return;
                 }
             } catch (e) {
-                // ignore and try next class
+
             }
         }
 
-        // nothing found — fallback to defaults
         lastLoadedIcons = DEFAULT_ICONS.slice();
         applyIcons(DEFAULT_ICONS, { forceAll: false });
     }
@@ -164,8 +144,6 @@ document.addEventListener("DOMContentLoaded", function() {
         mo.observe(theBackground, { attributes: true, attributeFilter: ['class'] });
     }
 
-    // attach animationiteration listeners so when each circle restarts its loop
-    // it picks an icon from the lastLoadedIcons (or default set if none)
     if (circles && circles.length) {
         circles.forEach(circle => {
             circle.addEventListener('animationiteration', () => {

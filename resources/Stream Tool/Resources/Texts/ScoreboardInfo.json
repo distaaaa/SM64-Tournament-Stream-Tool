@@ -1,14 +1,14 @@
 {
-  "p1Name": "kally",
+  "p1Name": "jaquarium",
   "p1Team": "",
-  "p1Pic": 1736636285395,
+  "p1Pic": 1736636285373,
   "p1Score": 0,
-  "p1WL": "W",
-  "p2Name": "jaquarium",
+  "p1WL": "L",
+  "p2Name": "kally",
   "p2Team": "",
-  "p2Pic": 1736636285373,
+  "p2Pic": 1736636285395,
   "p2Score": 0,
-  "p2WL": "L",
+  "p2WL": "W",
   "bestOf": "Bo3",
   "round": "Grand Finals",
   "tournamentName": "The Tangerine Tango",
@@ -19,5 +19,5 @@
   "caster2Bluesky": "ronc3na.bsky.social",
   "caster2Twitch": "ronc3na",
   "timerStatus": true,
-  "theme": "ttt"
+  "theme": "ttc"
 }
