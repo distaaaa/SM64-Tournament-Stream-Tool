@@ -60,6 +60,24 @@ body {
   text-align: center;
 }
 
+.themeBox {
+  outline: none;
+  border: none;
+  background: var(--bg4);
+  color: var(--text1);
+  height: 30px;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  border: 1px solid var(--bg4);
+  transition: border-color 100ms;  
+  display: flex; /* Use flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-align: center;
+  margin-right: 10px;
+}
+
 input[type="text"] {
   font-family: 'SUPERMARIO64SIGNFONT';
   font-size: 16px;

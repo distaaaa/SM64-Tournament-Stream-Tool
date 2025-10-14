@@ -25,6 +25,8 @@ const p1TagInp = document.getElementById('p1Tag');
 const p2NameInp = document.getElementById('p2Name');
 const p2TagInp = document.getElementById('p2Tag');
 
+let currentTheme = "ttt";
+
 // const p1PFP = document.getElementById('p1PFP');
 // const p2PFP = document.getElementById('p2PFP');
 
@@ -188,6 +190,7 @@ function init() {
         }
         bobToggle = !bobToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'bob';
     });
 
     wf.addEventListener("click", function(){
@@ -198,6 +201,7 @@ function init() {
         }
         wfToggle = !wfToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'wf';
     });
 
     jrb.addEventListener("click", function(){
@@ -208,6 +212,7 @@ function init() {
         }
         jrbToggle = !jrbToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'jrb';
     });
 
     ccm.addEventListener("click", function(){
@@ -218,6 +223,7 @@ function init() {
         }
         ccmToggle = !ccmToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'ccm';
     });
 
     bbh.addEventListener("click", function(){
@@ -228,6 +234,7 @@ function init() {
         }
         bbhToggle = !bbhToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'bbh';
     });
 
     hmc.addEventListener("click", function(){
@@ -238,6 +245,7 @@ function init() {
         }
         hmcToggle = !hmcToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'hmc';
     });
 
     lll.addEventListener("click", function(){
@@ -248,6 +256,7 @@ function init() {
         }
         lllToggle = !lllToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'lll';
     });
 
     ssl.addEventListener("click", function(){
@@ -258,6 +267,7 @@ function init() {
         }
         sslToggle = !sslToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'ssl';
     });
 
     ddd.addEventListener("click", function(){
@@ -268,6 +278,7 @@ function init() {
         }
         dddToggle = !dddToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'ddd';
     });
 
     sl.addEventListener("click", function(){
@@ -278,6 +289,7 @@ function init() {
         }
         slToggle = !slToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'sl';
     });
 
     wdw.addEventListener("click", function(){
@@ -288,6 +300,7 @@ function init() {
         }
         wdwToggle = !wdwToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'wdw';
     });
 
     thi.addEventListener("click", function(){
@@ -298,6 +311,7 @@ function init() {
         }
         thiToggle = !thiToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'thi';
     });
 
     ttm.addEventListener("click", function(){
@@ -308,6 +322,7 @@ function init() {
         }
         ttmToggle = !ttmToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'ttm';
     });
 
     ttc.addEventListener("click", function(){
@@ -318,6 +333,7 @@ function init() {
         }
         ttcToggle = !ttcToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'ttc';
     });
 
     rr.addEventListener("click", function(){
@@ -328,13 +344,14 @@ function init() {
         }
         rrToggle = !rrToggle;
         writeStageStrikingVisualizer();
+        currentTheme = 'rr';
     });
 
     document.getElementById('resetStages').addEventListener("click", resetStageStatuses);
 }
 
 function resetStageStatuses(){
-    console.log('here');
+    currentTheme = 'ttt';
     const stages = document.getElementsByTagName('button');
     for(let i = 0; i < stages.length; i++){
         console.log(i);
@@ -543,6 +560,7 @@ function goBack() {
     document.getElementById('goBack').style.left = "179px";
     movedSettings = false;
     movedStageStriker = false;
+    writeScoreboard();
     writeStageStrikingVisualizer();
 }
 
@@ -956,6 +974,7 @@ function writeScoreboard() {
                 caster2Bluesky: document.getElementById('cbsky2').value,
                 caster2Twitch: document.getElementById('cTwitch2').value,
                 timerStatus: timerOn,
+                theme: currentTheme,
             };
 
             let data = JSON.stringify(scoreboardJson, null, 2);

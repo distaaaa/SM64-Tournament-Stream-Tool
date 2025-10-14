@@ -6,6 +6,100 @@ const fadeInTime = .3; //(seconds)
 const fadeOutTime = .2;
 let introDelay = .8; //all animations will get this delay when the html loads (use this so it times with your transition)
 
+// list of all stage theme classes used on the background element
+const STAGE_THEMES = [
+	'ttt','bob','wf','jrb','ccm','bbh','hmc','lll','ssl','ddd','sl','wdw','thi','ttm','ttc','rr'
+];
+
+// helper to remove all stage theme classes and then (optionally) add the requested theme
+function applyBackgroundTheme(theme) {
+	const theBackground = document.getElementById('theBackground');
+	if (!theBackground) return;
+
+	// figure out which of the known stage themes are currently applied
+	const appliedThemes = STAGE_THEMES.filter(t => theBackground.classList.contains(t));
+
+	// if nothing would change (already has exactly the requested theme, or no theme requested and none present), skip
+	const alreadyHasRequested = (theme && appliedThemes.length === 1 && appliedThemes[0] === theme) || (!theme && appliedThemes.length === 0);
+	if (alreadyHasRequested) return;
+
+	// Crossfade to the new theme using a cloned overlay element so we don't abruptly remove classes on the original.
+	// Steps:
+	// 1. Create a clone of theBackground, insert it on top, and apply the new theme to the clone.
+	// 2. Fade the clone in while fading the original out.
+	// 3. When animation completes, remove all stage classes from theBackground, add the requested theme,
+	//    remove the clone, and ensure original opacity is restored.
+
+	// create the clone
+	const clone = theBackground.cloneNode(true);
+	clone.id = 'theBackground-clone';
+
+	// remove the circles/list of animated icons from the clone so animated icons
+	// currently on-screen are not replaced or covered during the crossfade.
+	const cloneCircles = clone.querySelector('.circles');
+	if (cloneCircles && cloneCircles.parentNode) {
+		cloneCircles.parentNode.removeChild(cloneCircles);
+	}
+	// ensure clone is positioned absolutely on top of the original
+	clone.style.position = 'absolute';
+	clone.style.top = theBackground.offsetTop + 'px';
+	clone.style.left = theBackground.offsetLeft + 'px';
+	clone.style.width = theBackground.offsetWidth + 'px';
+	clone.style.height = theBackground.offsetHeight + 'px';
+	clone.style.pointerEvents = 'none';
+	clone.style.opacity = 0;
+	// copy mask styles from the original so the clone is masked the same way
+	try {
+		const computed = window.getComputedStyle(theBackground);
+		const webkitMaskImage = computed.getPropertyValue('-webkit-mask-image');
+		const maskImage = computed.getPropertyValue('mask-image');
+		if (webkitMaskImage) clone.style.webkitMaskImage = webkitMaskImage;
+		if (maskImage) clone.style.maskImage = maskImage;
+
+		const webkitMaskSize = computed.getPropertyValue('-webkit-mask-size');
+		const maskSize = computed.getPropertyValue('mask-size');
+		if (webkitMaskSize) clone.style.webkitMaskSize = webkitMaskSize;
+		if (maskSize) clone.style.maskSize = maskSize;
+
+		const webkitMaskRepeat = computed.getPropertyValue('-webkit-mask-repeat');
+		const maskRepeat = computed.getPropertyValue('mask-repeat');
+		if (webkitMaskRepeat) clone.style.webkitMaskRepeat = webkitMaskRepeat;
+		if (maskRepeat) clone.style.maskRepeat = maskRepeat;
+
+		const webkitMaskPosition = computed.getPropertyValue('-webkit-mask-position');
+		const maskPosition = computed.getPropertyValue('mask-position');
+		if (webkitMaskPosition) clone.style.webkitMaskPosition = webkitMaskPosition;
+		if (maskPosition) clone.style.maskPosition = maskPosition;
+	} catch (e) {
+		// getComputedStyle might fail in some older environments; if so, skip copying mask styles
+	}
+	// apply theme classes to clone: remove other stage classes first
+	STAGE_THEMES.forEach(t => clone.classList.remove(t));
+	if (theme) clone.classList.add(theme);
+
+	// insert clone right after the original in the DOM so it overlays (same parent)
+	theBackground.parentNode.insertBefore(clone, theBackground.nextSibling);
+
+	// animate: fade clone in and original out simultaneously
+	const fadeDurationIn = 0.35;
+	const fadeDurationOut = 0.25;
+
+	gsap.to(clone, {opacity: 1, duration: fadeDurationIn, ease: 'power2.out'});
+	gsap.to(theBackground, {
+		opacity: 0,
+		duration: fadeDurationOut,
+		ease: 'power1.in',
+		onComplete: () => {
+			// swap classes on the original element
+			STAGE_THEMES.forEach(t => theBackground.classList.remove(t));
+			if (theme) theBackground.classList.add(theme);
+			// restore original opacity and remove clone
+			theBackground.style.opacity = 1;
+			if (clone && clone.parentNode) clone.parentNode.removeChild(clone);
+		}
+	});
+}
+
 //to avoid the code constantly running the same method over and over
 let p1ScorePrev, p1wlPrev;
 let p2ScorePrev, p2wlPrev;
@@ -29,7 +123,6 @@ let bluesky1, twitch1, bluesky2, twitch2;
 let socialSwitch = true; //true = bsky, false = twitch
 const socialInterval = 12000;
 
-
 let startup = true;
 
 // Timer things
@@ -45,7 +138,6 @@ let countdownTimer;
 let remainingTime;
 
 const timerFolder = 'Resources/Texts/Timer Info';
-
 
 window.onload = init;
 
@@ -89,6 +181,8 @@ async function getData(scInfo, stageInfo) {
 	bluesky2 = scInfo['caster2Bluesky'];
 	twitch2 = scInfo['caster2Twitch'];
 
+	let theme = scInfo['theme'];
+
 	// let caster1 = "";
 	// bluesky1 = "";
 	// twitch1 = "";
@@ -114,8 +208,8 @@ async function getData(scInfo, stageInfo) {
 	let ddd = stageInfo['ddd'];
 	let sl = stageInfo['sl'];
 	let wdw = stageInfo['wdw'];
-	let thi = stageInfo['thi'];
 	let ttm = stageInfo['ttm'];
+	let thi = stageInfo['thi'];
 	let ttc = stageInfo['ttc'];
 	let rr = stageInfo['rr'];
 
@@ -247,6 +341,7 @@ async function getData(scInfo, stageInfo) {
 					gsap.to("#overlayTimer", {y: 0, duration: fadeInTime});
 				}
 			}
+
 		startup = false; //next time we run this function, it will skip all we just did
 	}
 
@@ -255,7 +350,7 @@ async function getData(scInfo, stageInfo) {
 		if(displayStageStriker){
 			gsap.to("#stageStriker", {display: 'block', opacity: 1, duration: fadeInTime});
 		} else {
-			gsap.to("#stageStriker", {opacity: 0, duration: fadeOutTime, onComplete: () => {
+			gsap.to("#stageStriker", {opacity: 0, duration: .45, onComplete: () => {
 				document.getElementById('stageStriker').style.display = 'none';
 			}});
 		}
@@ -263,113 +358,98 @@ async function getData(scInfo, stageInfo) {
 		//player 1 time!
 		if (document.getElementById('p1Name').textContent != p1Name ||
 			document.getElementById('p1Team').textContent != p1Team) {
-			//move and fade out the player 1's text
 			fadeOutMove("#p1Wrapper", -pMove, () => {
-				//now that nobody is seeing it, quick, change the text's content!
 				updatePlayerName('p1Wrapper', 'p1Name', 'p1Team', p1Name, p1Team);
-				//fade the name back in with a sick movement
 				fadeInMove("#p1Wrapper");
 			});
 		}
-
 		const bobImg = document.getElementById('bob').querySelector('img');
+		// ensure only the requested stage theme is applied — clear other stage classes first
+		applyBackgroundTheme(theme);
+		
 		if (bob) {
 			gsap.to(bobImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(bobImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const wfImg = document.getElementById('wf').querySelector('img');
 		if (wf) {
 			gsap.to(wfImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(wfImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const jrbImg = document.getElementById('jrb').querySelector('img');
 		if (jrb) {
 			gsap.to(jrbImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(jrbImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const ccmImg = document.getElementById('ccm').querySelector('img');
 		if (ccm) {
 			gsap.to(ccmImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(ccmImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const bbhImg = document.getElementById('bbh').querySelector('img');
 		if (bbh) {
 			gsap.to(bbhImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(bbhImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const hmcImg = document.getElementById('hmc').querySelector('img');
 		if (hmc) {
 			gsap.to(hmcImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(hmcImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const lllImg = document.getElementById('lll').querySelector('img');
 		if (lll) {
 			gsap.to(lllImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(lllImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const sslImg = document.getElementById('ssl').querySelector('img');
 		if (ssl) {
 			gsap.to(sslImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(sslImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const dddImg = document.getElementById('ddd').querySelector('img');
 		if (ddd) {
 			gsap.to(dddImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(dddImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const slImg = document.getElementById('sl').querySelector('img');
 		if (sl) {
 			gsap.to(slImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(slImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const wdwImg = document.getElementById('wdw').querySelector('img');
 		if (wdw) {
 			gsap.to(wdwImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(wdwImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const ttmImg = document.getElementById('ttm').querySelector('img');
 		if (ttm) {
 			gsap.to(ttmImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(ttmImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const thiImg = document.getElementById('thi').querySelector('img');
 		if (thi) {
 			gsap.to(thiImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(thiImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const ttcImg = document.getElementById('ttc').querySelector('img');
 		if (ttc) {
 			gsap.to(ttcImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
 		} else {
 			gsap.to(ttcImg, { filter: "grayscale(0)", duration: 0.4, ease: "power2.out" });
 		}
-
 		const rrImg = document.getElementById('rr').querySelector('img');
 		if (rr) {
 			gsap.to(rrImg, { filter: "grayscale(1)", duration: 0.4, ease: "power2.out" });
