@@ -113,7 +113,7 @@ function init() {
     writeStageStrikingVisualizer();
     // Listener for update button
     document.getElementById('updateRegion').addEventListener("click", writeScoreboard);
-    document.getElementById('settingsRegion').addEventListener("click", moveViewportSettings);
+    // document.getElementById('settingsRegion').addEventListener("click", moveViewportSettings);
     document.getElementById('stageStrikeRegion').addEventListener("click", moveViewportStageStriker);
 
     document.getElementById('goBack').addEventListener("click", goBack);

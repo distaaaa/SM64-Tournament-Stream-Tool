@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
 
                 const circleRect = circle.getBoundingClientRect();
-                const isOffscreenStart = (circleRect.top >= containerRect.bottom - 50) || (circleRect.bottom <= containerRect.top + 50);
+                const isOffscreenStart = (circleRect.top >= containerRect.bottom - 25) || (circleRect.bottom <= containerRect.top + 25);
                 const isInvisible = window.getComputedStyle(circle).opacity === '0' || window.getComputedStyle(circle).display === 'none';
 
                 if (isOffscreenStart || isInvisible) {

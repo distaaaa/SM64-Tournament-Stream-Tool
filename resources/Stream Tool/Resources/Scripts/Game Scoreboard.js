@@ -28,12 +28,12 @@ function applyBackgroundTheme(theme) {
 	const clone = theBackground.cloneNode(true);
 	clone.id = 'theBackground-clone';
 
-	// remove the circles/list of animated icons from the clone so animated icons
-	// currently on-screen are not replaced or covered during the crossfade.
-	const cloneCircles = clone.querySelector('.circles');
-	if (cloneCircles && cloneCircles.parentNode) {
-		cloneCircles.parentNode.removeChild(cloneCircles);
-	}
+	// // remove the circles/list of animated icons from the clone so animated icons
+	// // currently on-screen are not replaced or covered during the crossfade.
+	// const cloneCircles = clone.querySelector('.circles');
+	// if (cloneCircles && cloneCircles.parentNode) {
+	// 	cloneCircles.parentNode.removeChild(cloneCircles);
+	// }
 	// ensure clone is positioned absolutely on top of the original
 	clone.style.position = 'absolute';
 	clone.style.top = theBackground.offsetTop + 'px';
@@ -75,8 +75,8 @@ function applyBackgroundTheme(theme) {
 	theBackground.parentNode.insertBefore(clone, theBackground.nextSibling);
 
 	// animate: fade clone in and original out simultaneously
-	const fadeDurationIn = 0.35;
-	const fadeDurationOut = 0.25;
+	const fadeDurationIn = 1.5;
+	const fadeDurationOut = 1.45;
 
 	gsap.to(clone, {opacity: 1, duration: fadeDurationIn, ease: 'power2.out'});
 	gsap.to(theBackground, {

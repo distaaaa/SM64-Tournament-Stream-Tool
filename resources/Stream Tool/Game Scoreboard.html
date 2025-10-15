@@ -349,6 +349,7 @@
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
+                -webkit-mask-image: url("Resources/Overlay/Game Mask.png");
             }
     
             .circles li{
@@ -591,6 +592,7 @@
                 height: 250px;
                 opacity: 1;
                 margin-bottom: -4px;
+                border-radius: 8px;
             }
 
             .stage.grayscale {
@@ -619,35 +621,25 @@
     <body>
         
         <div id ="theBackground" class="area">
-            <ul class="circles" id="circles">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <!-- <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li> -->
-            </ul>
+            
         </div>
+
+        <ul class="circles" id="circles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        
 
         <img class="absol" src="Resources/Overlay/Game Borders.png">
 
@@ -802,6 +794,14 @@
                 <span id="timer" class="timer">0</span>
             </span>
         </div>    
+        <!-- Embed remote page with an iframe -->
+        <div id="remoteWrapper" style="position:absolute; top:785px; left:600px; width:1920px; height:1080px; pointer-events:auto; z-index:0;">
+        <iframe id="remoteFrame"
+                src="https://chatis.is2511.com/v2/?channel=dista64&animate=true&bots=true&fade=30&size=1.5&font=2&stroke=2&shadow=1&emoteScale=1"
+                style="width:40%; height:28.1%; border:0; background:transparent;"
+                sandbox="allow-scripts allow-same-origin allow-forms">
+        </iframe>
+        </div>
         <div id="stageStriker" class="scoreTick">
             <svg width="1920" id="backgroundPart" height="1080" color="black" class="absol">
                 <polygon points="0,0 0,1080 1920,1080 1920,0"/>
