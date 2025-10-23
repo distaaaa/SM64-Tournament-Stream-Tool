@@ -41,6 +41,10 @@
                 transform: scaleX(-1);
             }
 
+            #brbScreen{
+                opacity: 0;
+            }
+
             #theBackground {
                 position: absolute;
                 width: 1920px;
@@ -48,6 +52,13 @@
                 top: 0px;
                 left: 0px;
                 -webkit-mask-image: url("Resources/Overlay/Game Mask.png");
+            }
+            #theBackgroundBRB {
+                position: absolute;
+                width: 1920px;
+                height: 1080px;
+                top: 0px;
+                left: 0px;
             }
     
             .scoreboardP1{
@@ -85,6 +96,50 @@
                 opacity: 0;
                 color: black;
             }
+            .comingUp{
+                position: absolute;
+                width: 600px;
+                height: 120px;
+                line-height: 100px;
+                text-align: center;
+                top: 319px;
+                opacity: 1;
+                color: white;
+                font-size: 100px;
+                left: 630px;
+                filter: drop-shadow(4px 4px 3px black)
+            }
+            .wrappersBRB {
+                position: absolute;
+                width: 600px;
+                height: 120px;
+                line-height: 100px;
+                text-align: center;
+                top: 438px;
+                opacity: 0;
+                color: white;
+                font-size: 100px;
+                margin-left: 660px;
+                filter: drop-shadow(4px 4px 3px black)
+            }
+            #overlayRoundBRB {
+                top: 536px;
+                margin-left: 0px;
+                align-items: center;
+            }
+            .roundWrappersBRB {
+                position: absolute;
+                width: 600px;
+                height: 120px;
+                line-height: 100px;
+                /* text-align: center; */
+                top: 556px;
+                opacity: 0;
+                color: white;
+                font-size: 100px;
+                /* margin-left: 760px; */
+                filter: drop-shadow(0px 0px 3px black);                                                          ;
+            }
             #timerWrapper{
                 opacity: 1;
                 top: 0px;
@@ -108,7 +163,7 @@
                 top: 0px;
             }
     
-            .teams {
+            .teams, .teamsBRB {
                 color: rgb(116, 116, 116);
             }
 
@@ -179,12 +234,30 @@
                 opacity: 0;
                 filter: drop-shadow(0px 0px 3px black);
             }
+            #overlayRoundBRB {
+                font-family: "SUPERMARIO64SIGNFONT-Bold";
+                /* position: absolute; */
+                left: 660px;
+                /* bottom: 70px; */
+                opacity: 0;
+                filter: drop-shadow(0px 0px 3px black);
+                align-items: center;
+            }
             #round {
                 position: absolute;
                 width: 263px;
                 height: 50px;
                 bottom: -18px;
                 text-align: center;
+            }
+            #roundBRB {
+                /* position: absolute; */
+                width: 600px;
+                height: 60px;
+                bottom: 0px;
+                text-align: center;
+                filter: drop-shadow(0px 0px 3px black);
+                /* margin-left: 760px; */
             }
 
             #bestOf {
@@ -197,6 +270,18 @@
                 color: rgb(206, 206, 206);
             }
 
+            #bestOfBRB {
+                /* position: absolute; */
+                width: 600px;
+                height: 40px;
+                bottom: -22px;
+                text-align: center;
+                font-size: 40px;
+                color: rgb(206, 206, 206);
+                filter: drop-shadow(0px 0px 3px black);
+                /* margin-left: 760px; */
+            }
+
             #overlayCasters {
                 position: absolute;
                 right: 12px;
@@ -207,9 +292,13 @@
             }
             #caster1 {
                 position: absolute;
-                bottom: 110px;
+                bottom: 170px;
             }
             #caster2 {
+                position: absolute;
+                bottom: 110px;
+            }
+            #caster3 {
                 position: absolute;
                 bottom: 50px;
             }
@@ -276,7 +365,8 @@
     
     
             .area{
-                background: linear-gradient(to top, #260734, #605aa4);  
+                /* background: linear-gradient(to top, #260734, #605aa4);   */
+                background: linear-gradient(to top, #22253b, #905ee0);
                 width: 100%;
                 height: 100vh;  
             }
@@ -290,7 +380,7 @@
             }
 
             .area.wf{
-                background: linear-gradient(to top, #1a1a1a, #4b4b4b);  
+                background: linear-gradient(to top, #1c1c1c, #787878);  
             }
             
             .area.jrb{
@@ -298,7 +388,7 @@
             }
 
             .area.ccm{
-                background: linear-gradient(to top, #4d2d00, #ba6d01);  
+                background: linear-gradient(to top, #12044f , #62b5d8);  
             }
 
             .area.bbh{
@@ -325,7 +415,7 @@
                 background: linear-gradient(to top, #002a4d,#41a3f2);  
             }
             .area.wdw{
-                background: linear-gradient(to top, #090033, #3a1fb1);  
+                background: linear-gradient(to top, #090033, #664cde);  
             }
             .area.ttm{
                 background: linear-gradient(to top, #430d00, #d34622);  
@@ -334,10 +424,10 @@
                 background: linear-gradient(to top, #00331a, #00b36a);  
             }
             .area.ttc{
-                background: linear-gradient(to top, #372704, #cd9d36);  
+                background: linear-gradient(to top, #371304, #cd9d36);  
             }
             .area.rr{
-                background: linear-gradient(to top, #1a001a, #990099);  
+                background: linear-gradient(to top, #1a001a, #b875dc);  
             }
             .sl {
                 align-self: center;
@@ -350,6 +440,13 @@
                 height: 100%;
                 overflow: hidden;
                 -webkit-mask-image: url("Resources/Overlay/Game Mask.png");
+                mask-image: url("Resources/Overlay/Game Mask.png");
+            }
+
+            /* Remove mask for BRB circles (override by id) */
+            #brbCircles {
+                -webkit-mask-image: none;
+                mask-image: none;
             }
     
             .circles li{
@@ -548,7 +645,7 @@
                 animation-delay: 1s;
             }
 
-            .names {
+            .names, .namesBRB {
                 position: relative;
                 color: black;
                 font-family: "SUPERMARIO64SIGNFONT-Bold";
@@ -619,7 +716,6 @@
         </style>
     </head>
     <body>
-        
         <div id ="theBackground" class="area">
             
         </div>
@@ -640,9 +736,8 @@
                 <li></li>
             </ul>
         
-
         <img class="absol" src="Resources/Overlay/Game Borders.png">
-
+        
         <div id="overlayP1" class="scoreboardP1">
             <img src="Resources/Overlay/Player Border.png" class="absol">
             
@@ -786,6 +881,36 @@
                 </div>
     
             </div>
+
+            <div id="caster3">
+    
+                <div id="caster3TextBox" class="casterTextBox">
+                    <svg class="casterIcon" viewBox="0 0 261.075 261.075" id="caster3Icon">
+                        <path d="M126.855,174.05h5.744c22.447,0,40.641-18.194,40.641-40.641V40.641C173.24,18.194,155.046,0,132.599,0h-5.744c-22.447,0-40.641,18.194-40.641,40.641v92.769C86.215,155.856,104.408,174.05,126.855,174.05z"/>
+                        <path d="M124.288,201.147v43.61H86.215c-4.504,0-8.159,3.65-8.159,8.159s3.655,8.159,8.159,8.159h92.464c4.504,0,8.159-3.65,8.159-8.159s-3.655-8.159-8.159-8.159h-38.073v-43.823c34.832-3.138,63.262-34.44,63.262-71.208c0-4.509-3.655-8.159-8.159-8.159s-8.159,3.65-8.159,8.159c0,29.92-24.122,55.201-52.672,55.201h-8.686c-28.544,0-52.666-24.699-52.666-53.939c0-4.509-3.655-8.159-8.159-8.159s-8.159,3.65-8.159,8.159C57.208,169.073,87.134,200.109,124.288,201.147z"/>
+                    </svg>
+                    <span id="caster3N" class="casterText"></span>
+                </div>
+                
+                <div id="caster3SocialBox" class="casterSocialBox">
+                    <div id="caster3BlueskyBox" class="casterBlueskyBox">
+                        <svg class="blueskyIcon" viewBox="0 -3.268 64 68.414" id="caster3BlueskyIcon">
+                            <path d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805zm36.254 0C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745z"></path>
+                        </svg>
+                        <span id="caster3Tr" class="socialText"></span>
+                    </div>
+    
+                    <div id="caster3TwitchBox" class="casterTwitchBox">
+                        <svg class="twitchIcon" viewBox="0 0 24 24" id="caster3TwitchIcon">
+                            <path d="m.975 4.175v16.694h5.749v3.131h3.139l3.134-3.132h4.705l6.274-6.258v-14.61h-21.434zm3.658-2.09h17.252v11.479l-3.66 3.652h-5.751l-3.134 3.127v-3.127h-4.707z"/>
+                            <path d="m10.385 6.262h2.09v6.26h-2.09z"/>
+                            <path d="m16.133 6.262h2.091v6.26h-2.091z"/>
+                        </svg>
+                        <span id="caster3Th" class="socialText"></span>
+                    </div>
+                </div>
+    
+            </div>
         </div>
 
         <div id="overlayTimer" class="scoreTick">
@@ -854,6 +979,39 @@
                 </div>
             </div>
             <div id="stageStrikerLabel" class="stageStrikerLabel">Current Stage Pool</div>
+        </div>
+        <div id="brbScreen">
+            
+            <div id ="theBackgroundBRB" class="area">
+            
+            </div>
+
+             <ul class="circles" id="brbCircles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div id="comingUp" class="comingUp">Coming Up Next...</div>
+            <span id="matchUp" class="wrappersBRB">
+                <span id="p1TeamBRB" class="teamsBRB"></span>
+                <span id="p1NameBRB" class="namesBRB"></span>
+                <span id="p2TeamBRB" class="teamsBRB"></span>
+                <span id="p2NameBRB" class="namesBRB"></span>
+            </span>    
+            <div id="overlayRoundBRB" class="wrappersBRB">
+                <div id="roundBRB"></div>
+                <div id="bestOfBRB">Best of 5</div>
+            </div>
         </div>
         <script src="Resources/Scripts/Background.js"></script>
     </body>

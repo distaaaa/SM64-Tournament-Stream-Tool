@@ -26,6 +26,7 @@ const p2NameInp = document.getElementById('p2Name');
 const p2TagInp = document.getElementById('p2Tag');
 
 let currentTheme = "ttt";
+let currentBRB = false;
 
 // const p1PFP = document.getElementById('p1PFP');
 // const p2PFP = document.getElementById('p2PFP');
@@ -158,6 +159,12 @@ function init() {
     document.getElementById("bo5Div").style.backgroundImage = "linear-gradient(to top, #575757, #00000000)";
     document.getElementById("bo3Div").style.color = "var(--text2)";
     document.getElementById("bo1Div").style.color = "var(--text2)";
+
+    document.getElementById("back").addEventListener("click", changeBRB);
+    document.getElementById("brb").addEventListener("click", changeBRB);
+
+    document.getElementById("back").style.backGroundImage = "linear-gradient(to top, #575757, #00000000)";
+    document.getElementById("brb").style.color = "var(--text2)";
 
     // Check if round is Grand Finals
     roundInp.addEventListener("input", checkRound);
@@ -456,6 +463,7 @@ function resetTimer() {
     isRunning = false;
     countedDown = false;
     display.textContent = "0";
+    currentTheme = 'ttt';
 }
 
 function updateTimer(){
@@ -769,6 +777,23 @@ function changeBestOf() {
     theOtherBestOf2.style.backgroundImage = "var(--bg4)";
 }
 
+function changeBRB(){
+    let prevBRBStatus;
+    if(this == document.getElementById("brb")) {
+        prevBRBStatus = document.getElementById("back");
+        currentTheme = '';
+        currentBRB = true;
+    } else {
+        prevBRBStatus = document.getElementById("brb");
+        currentBRB = false;
+        currentTheme = 'ttt';
+    }
+    this.style.color = "var(--text1)";
+    this.style.backgroundImage = "linear-gradient(to top, #575757, #00000000)";
+    prevBRBStatus.style.color = "var(--text2)";
+    prevBRBStatus.style.backgroundImage = "var(--bg4)";
+}
+
 function checkRound() {
     const wlButtons = document.getElementsByClassName("wlButtons");
     if (roundInp.value.toLocaleUpperCase().includes("Grand".toLocaleUpperCase())) {
@@ -946,7 +971,6 @@ function writeScoreboard() {
     let p1File = document.getElementById('file1').files[0];
     let p2File = document.getElementById('file2').files[0];
     
-    console.log(timerOn)
     fetch('../resources/Stream Tool/Resources/Player Icons/black.png')
         .then(response => response.blob())
         .then(blob => {
@@ -973,14 +997,20 @@ function writeScoreboard() {
                 caster2Name: document.getElementById('cName2').value,
                 caster2Bluesky: document.getElementById('cbsky2').value,
                 caster2Twitch: document.getElementById('cTwitch2').value,
+                caster3Name: document.getElementById('cName3').value,
+                caster3Bluesky: document.getElementById('cbsky3').value,
+                caster3Twitch: document.getElementById('cTwitch3').value,
                 timerStatus: timerOn,
                 theme: currentTheme,
+                brb: currentBRB,
             };
 
             let data = JSON.stringify(scoreboardJson, null, 2);
 
 
             fs.writeFileSync(path.join(streamToolDirectory, "Texts", "ScoreboardInfo.json"), data);
+            // fuck YOU we're not doing it this way anymore pal
+            // fs.writeFileSync(path.join(streamToolDirectory, "Texts", "ScoreboardInfo copy.json"), data);
 
             //simple .txt files
             fs.writeFileSync(path.join(textsFolder, "Player 1.txt"), p1NameInp.value);
@@ -996,6 +1026,10 @@ function writeScoreboard() {
             fs.writeFileSync(path.join(textsFolder, "Caster 2 Name.txt"), document.getElementById('cName2').value);
             fs.writeFileSync(path.join(textsFolder, "Caster 2 Bluesky.txt"), document.getElementById('cbsky2').value);
             fs.writeFileSync(path.join(textsFolder, "Caster 2 Twitch.txt"), document.getElementById('cTwitch2').value);
+
+            fs.writeFileSync(path.join(textsFolder, "Caster 3 Name.txt"), document.getElementById('cName3').value);
+            fs.writeFileSync(path.join(textsFolder, "Caster 3 Bluesky.txt"), document.getElementById('cbsky3').value);
+            fs.writeFileSync(path.join(textsFolder, "Caster 3 Twitch.txt"), document.getElementById('cTwitch3').value);
             
             // Copy p1File and p2File to another directory
             const copyFile = (file, defaultFile, filePath) => {

@@ -11,10 +11,10 @@ function createMainWindow() {
     mainWindow = new BrowserWindow({
         title: 'TTT Tool',
         width: 584,
-        height: 380,
+        height: 410,
 
         minWidth: 584,
-        minHeight: 380,
+        minHeight: 410,
         // maxWidth: 584,
         // maxHeight: 378,
 

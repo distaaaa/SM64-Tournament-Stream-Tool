@@ -270,6 +270,15 @@ input[type="text"] {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
 }
+#brb{
+  margin-left: 5px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+#back{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
 
 #roundName, #tournamentName, #countDownLength {
   width: 100%;
@@ -431,7 +440,7 @@ input[type='file'] {
 
 /* caster region */
 #casterInfo {
-  height: 60px;
+  height: 90px;
   padding: 10px;
   padding: 8px 10px 12px 10px;
   border-bottom: thin;
@@ -466,16 +475,23 @@ input[type='file'] {
   display: flex;
   justify-items: center;
 }
+#caster3 {
+  padding-bottom: 4px;
+  display: flex;
+  justify-items: center;
+}
 
-#cName1, #cName2 {
+#cName1, #cName2, #cName3 {
   width: 190px;
   margin-left: 4px;
   align-items: center;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
   /* text-align: center; */
 }
 
-#cbsky1, #cbsky2, #cTwitch1, #cTwitch2 {
-  width: 156px;
+#cbsky1, #cbsky2, #cbsky3, #cTwitch1, #cTwitch2, #cTwitch3 {
+  width: 152px;
   margin-left: 1px;
   align-items: center;
   /* text-align: center; */

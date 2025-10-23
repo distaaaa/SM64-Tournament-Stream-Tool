@@ -107,13 +107,15 @@ let p2Pic, p2PicPrev;
 //max text sizes (used when resizing back)
 const tournamentSize = '32px';
 const roundSize = '28px';
+const brbRoundSize = '60px';
 const casterSize = '24px';
 const bskySize = '20px';
 
 //variables for the bsky/twitch constant change
 let socialInt1;
 let socialInt2;
-let bluesky1, twitch1, bluesky2, twitch2;
+let socialInt3;
+let bluesky1, twitch1, bluesky2, twitch2, bluesky3, twitch3;
 let socialSwitch = true; //true = bsky, false = twitch
 const socialInterval = 12000;
 
@@ -170,8 +172,12 @@ async function getData(scInfo, stageInfo) {
 	let caster2 = scInfo['caster2Name'];
 	bluesky2 = scInfo['caster2Bluesky'];
 	twitch2 = scInfo['caster2Twitch'];
+	let caster3 = scInfo['caster3Name'];
+	bluesky3 = scInfo['caster3Bluesky'];
+	twitch3 = scInfo['caster3Twitch'];
 
 	let theme = scInfo['theme'];
+	let brb = scInfo['brb'];
 
 	// Player Pic Info
 	let p1Pic = scInfo['p1Pic'];
@@ -222,6 +228,8 @@ async function getData(scInfo, stageInfo) {
 		p1ScorePrev = p1Score;
 
 
+
+
 		resizeText(document.getElementById('timerWrapper'));
 		updatePlayerName('p2Wrapper', 'p2Name', 'p2Team', p2Name, p2Team);
 		gsap.fromTo("#p2Wrapper", 
@@ -237,6 +245,15 @@ async function getData(scInfo, stageInfo) {
 		updateScore(2, p2Score);
 		moveScoresIntro(2, bestOf, p2WL, -sMove);
 		p2ScorePrev = p2Score;
+		if(p1Name != "" && p2Name != ""){
+			updateMatchup('matchUp', p1Name, p2Name);
+		}
+		
+		gsap.fromTo("#matchUp", 
+			{x: pMove},
+			{delay: introDelay+.1, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
+
+
 
 		// //set this for later
 		bestOfPrev = bestOf;
@@ -248,18 +265,25 @@ async function getData(scInfo, stageInfo) {
 		// console.log(tournament);
 		// update the round text
 		updateRound(round);
+		updateRoundBRB(round);
 		//update the best of text
 		if (bestOf == "Bo5") {
 			document.getElementById('bestOf').textContent = "Best of 5";
+			document.getElementById('bestOfBRB').textContent = "Best of 5";
 		} else if (bestOf == "Bo3") {
             document.getElementById('bestOf').textContent = "Best of 3";
+			document.getElementById('bestOfBRB').textContent = "Best of 3";
         } else {
 			document.getElementById('bestOf').textContent = "Best of 1";
+			document.getElementById('bestOfBRB').textContent = "Best of 1";
 		}
 		//fade them in (but only if round text is not empty)
 		if (round != "") {
 			gsap.to("#overlayRound", {delay: introDelay, opacity: 1, ease: "power2.out", duration: fadeInTime+.2});
+			gsap.to("#overlayRoundBRB", {delay: introDelay, opacity: 1, ease: "power2.out", duration: fadeInTime+.2});
 		}
+
+		
 
 		if(tournament != "") {
 			gsap.to("#overlayTournament",{delay: introDelay, opacity: 1, ease: "power2.out", duration: fadeInTime+.2});
@@ -272,17 +296,25 @@ async function getData(scInfo, stageInfo) {
 		updateSocialText("caster2N", caster2, casterSize, "caster2TextBox");
 		updateSocialText("caster2Tr", bluesky2, bskySize, "caster2BlueskyBox");
 		updateSocialText("caster2Th", twitch2, bskySize, "caster2TwitchBox");
+		updateSocialText("caster3N", caster3, casterSize, "caster3TextBox");
+		updateSocialText("caster3Tr", bluesky3, bskySize, "caster3BlueskyBox");
+		updateSocialText("caster3Th", twitch3, bskySize, "caster3TwitchBox");
+	
 
 		
 		// setup bluesky/twitch change
 		socialChange1("caster1BlueskyBox", "caster1TwitchBox");
 		socialChange2("caster2BlueskyBox", "caster2TwitchBox");
+		socialChange3("caster3BlueskyBox", "caster3TwitchBox");
 		// set an interval to keep changing the names
 		socialInt1 = setInterval( () => {
 			socialChange1("caster1BlueskyBox", "caster1TwitchBox");
 		}, socialInterval);
 		socialInt2 = setInterval(() => {
 			socialChange2("caster2BlueskyBox", "caster2TwitchBox");
+		}, socialInterval);
+		socialInt3 = setInterval(() => {
+			socialChange3("caster3BlueskyBox", "caster3TwitchBox");
 		}, socialInterval);
 
 		//keep changing this boolean for the previous intervals
@@ -306,6 +338,12 @@ async function getData(scInfo, stageInfo) {
 		} else {
 			fadeIn("#caster2TextBox", .2);
 			fadeIn("#caster2Icon", .2);
+		}
+		if (caster3 == "") {
+			document.getElementById('caster3Icon').style.opacity = 0;
+		} else {
+			fadeIn("#caster3TextBox", .2);
+			fadeIn("#caster3Icon", .2);
 		}
 
 		gsap.to("#overlayTimer", {y: -pMove, opacity: 0, ease: "power1.in", duration: fadeOutTime, onComplete: timerMoved});
@@ -336,6 +374,14 @@ async function getData(scInfo, stageInfo) {
 				updatePlayerName('p1Wrapper', 'p1Name', 'p1Team', p1Name, p1Team);
 				fadeInMove("#p1Wrapper");
 			});
+		}
+
+		if(brb){
+			gsap.to('#brbScreen', {display: 'block', opacity: 1, duration: fadeInTime});
+		} else {
+			gsap.to('#brbScreen', {opacity: 0, duration: .45, onComplete: () => {
+				document.getElementById('brbScreen').style.display = 'none';
+			}})
 		}
 		
 		// ensure only the requested stage theme is applied — clear other stage classes first
@@ -481,6 +527,15 @@ async function getData(scInfo, stageInfo) {
 			});
 		}
 
+		if (document.getElementById('matchUp').textContent != (p1Name + " VS " + p2Name)) {
+			fadeOutMove("#matchUp", pMove, () => {
+				updateMatchup('matchUp', p1Name, p2Name);
+				if(p1Name != "" && p2Name != ""){
+					fadeInMove("#matchUp");
+				}
+			});
+		}
+
 
 		//player 2's character portrait change
 		if (p2PicPrev != p2Pic) {
@@ -524,6 +579,10 @@ async function getData(scInfo, stageInfo) {
                         document.getElementById('bestOf').textContent = "Best of 5";
                         fadeIn("#bestOf");
                     });
+					fadeOut("#bestOfBRB", () => {
+						document.getElementById('bestOfBRB').textContent = "Best of 5";
+						fadeIn("#bestOfBRB");
+					});
                 } else if (bestOfPrev == "Bo1") {
                     gsap.fromTo('#win3P1',
                         {x: -pMove},
@@ -541,6 +600,10 @@ async function getData(scInfo, stageInfo) {
                         document.getElementById('bestOf').textContent = "Best of 5";
                         fadeIn("#bestOf");
                     });
+					fadeOut("#bestOfBRB", () => {
+						document.getElementById('bestOfBRB').textContent = "Best of 5";
+						fadeIn("#bestOfBRB");
+					});
                 } else {
 					gsap.fromTo('#win3P1',
                         {x: -pMove},
@@ -564,6 +627,10 @@ async function getData(scInfo, stageInfo) {
                         document.getElementById('bestOf').textContent = "Best of 5";
                         fadeIn("#bestOf");
                     });
+					fadeOut("#bestOfBRB", () => {
+						document.getElementById('bestOfBRB').textContent = "Best of 5";
+						fadeIn("#bestOfBRB");
+					});
 				}
 			} else if (bestOf == "Bo3") {
                 if(bestOfPrev == "Bo5"){
@@ -575,6 +642,10 @@ async function getData(scInfo, stageInfo) {
                         document.getElementById('bestOf').textContent = "Best of 3";
                         fadeIn("#bestOf");
                     });
+					fadeOut("#bestOfBRB", () => {
+						document.getElementById('bestOfBRB').textContent = "Best of 3";
+						fadeIn("#bestOfBRB");
+					});
                 } else if(bestOfPrev == "Bo1") {
                     gsap.fromTo('#win2P1',
                         {x: -pMove},
@@ -586,6 +657,10 @@ async function getData(scInfo, stageInfo) {
                         document.getElementById('bestOf').textContent = "Best of 3";
                         fadeIn("#bestOf");
                     });
+					fadeOut("#bestOfBRB", () => {
+						document.getElementById('bestOfBRB').textContent = "Best of 3";
+						fadeIn("#bestOfBRB");
+					});
                 } else {
                     gsap.fromTo('#win2P1',
                         {x: -pMove},
@@ -602,7 +677,11 @@ async function getData(scInfo, stageInfo) {
 					fadeOut("#bestOf", () => {
 						document.getElementById('bestOf').textContent = "Best of 3";
 						fadeIn("#bestOf");
-					});				
+					});			
+					fadeOut("#bestOfBRB", () => {
+						document.getElementById('bestOfBRB').textContent = "Best of 3";
+						fadeIn("#bestOfBRB");
+					});	
 				}
 			} else {
                 if(bestOfPrev == "Bo5") {
@@ -618,6 +697,10 @@ async function getData(scInfo, stageInfo) {
                         document.getElementById('bestOf').textContent = "Best of 1";
                         fadeIn("#bestOf");
                     });
+					fadeOut("#bestOfBRB", () => {
+						document.getElementById('bestOfBRB').textContent = "Best of 1";
+						fadeIn("#bestOfBRB");
+					});
                 } else if (bestOfPrev == "Bo3") {
                     gsap.to('#win2P1',
                         {x: -pMove, opacity: 0, ease: "power2.in", duration: fadeInTime});
@@ -627,6 +710,10 @@ async function getData(scInfo, stageInfo) {
                         document.getElementById('bestOf').textContent = "Best of 1";
                         fadeIn("#bestOf");
                     });
+					fadeOut("#bestOfBRB", () => {
+						document.getElementById('bestOfBRB').textContent = "Best of 1";
+						fadeIn("#bestOfBRB");
+					});
                 } else {
 					gsap.fromTo('#win1P1',
 						{x: -pMove},
@@ -638,6 +725,10 @@ async function getData(scInfo, stageInfo) {
                         document.getElementById('bestOf').textContent = "Best of 5";
                         fadeIn("#bestOf");
                     });
+					fadeOut("#bestOfBRB", () => {
+						document.getElementById('bestOfBRB').textContent = "Best of 1";
+						fadeIn("#bestOfBRB");
+					});
 				}
             }
 			bestOfPrev = bestOf;
@@ -662,6 +753,14 @@ async function getData(scInfo, stageInfo) {
 			});
 		}
 
+		if (document.getElementById('roundBRB').textContent != round){
+			fadeOut("#overlayRoundBRB", () => {
+				updateRoundBRB(round);
+				if (round != "") {
+					fadeIn("#overlayRoundBRB");
+				}
+			});
+		}
 
 		//update caster 1 info
 		if (document.getElementById('caster1N').textContent != caster1){
@@ -699,6 +798,23 @@ async function getData(scInfo, stageInfo) {
 
 		if (document.getElementById('caster2Th').textContent != twitch2){
 			updateSocial(twitch2, "caster2Th", "caster2TwitchBox", bluesky2, "caster2BlueskyBox");
+		}
+		//caster 3, same as above
+		if (document.getElementById('caster3N').textContent != caster3){
+			fadeOut("#caster3TextBox", () => {
+				updateSocialText("caster3N", caster3, casterSize, 'caster3TextBox');
+				if (caster3 != "") {
+					fadeIn("#caster3TextBox", .2);
+					fadeIn("#caster3Icon", .2);
+				}
+			});
+		}
+		if (document.getElementById('caster3Tr').textContent != bluesky3){
+			updateSocial(bluesky3, "caster3Tr", "caster3BlueskyBox", twitch3, "caster3TwitchBox");
+		}
+
+		if (document.getElementById('caster3Th').textContent != twitch3){
+			updateSocial(twitch3, "caster3Th", "caster3TwitchBox", bluesky3, "caster3BlueskyBox");
 		}
 	}
 }
@@ -814,11 +930,43 @@ function socialChange2(blueskyWrapperID, twitchWrapperID) {
 
 	}
 }
+function socialChange3(blueskyWrapperID, twitchWrapperID) {
+
+	const blueskyWrapperEL = document.getElementById(blueskyWrapperID);
+	const twitchWrapperEL = document.getElementById(twitchWrapperID);
+
+	if (startup) {
+
+		if (!bluesky3 && !twitch3) {
+			blueskyWrapperEL.style.opacity = 0;
+			twitchWrapperEL.style.opacity = 0;
+		} else if (!bluesky3 && !!twitch3) {
+			blueskyWrapperEL.style.opacity = 0;
+			twitchWrapperEL.style.opacity = 1;
+		} else {
+			blueskyWrapperEL.style.opacity = 1;
+			twitchWrapperEL.style.opacity = 0;
+		}
+
+	} else if (!!bluesky3 && !!twitch3) {
+
+		if (socialSwitch) {
+			fadeOut(blueskyWrapperEL, () => {
+				fadeIn(twitchWrapperEL, 0);
+			});
+		} else {
+			fadeOut(twitchWrapperEL, () => {
+				fadeIn(blueskyWrapperEL, 0);
+			});
+		}
+
+	}
+}
 //function to decide when to change to what
 function updateSocial(mainSocial, mainText, mainBox, otherSocial, otherBox) {
 	//check if this is for twitch or bluesky
 	let localSwitch = socialSwitch;
-	if (mainText == "caster1Th" || mainText == "caster2Th") {
+	if (mainText == "caster1Th" || mainText == "caster2Th" || mainText == "caster3Th") {
 		localSwitch = !localSwitch;
 	}
 	//check if this is their turn so we fade out the other one
@@ -859,6 +1007,14 @@ function updatePlayerName(wrapperID, nameID, teamID, pName, pTeam) {
     resizeText(document.getElementById(wrapperID)); //resize if it overflows
 }
 
+function updateMatchup(wrapperID, p1Name, p2Name){
+	const matchupEL = document.getElementById(wrapperID);
+	matchupEL.style.fontSize = '100px'; //set original text size
+    matchupEL.textContent = p1Name + " VS " + p2Name; //change the actual text
+    matchupEL.style.color = 'rgb(255, 255, 255)'; // change color
+	resizeText(document.getElementById(wrapperID)); //resize if it overflows
+}
+
 //round change
 function updateRound(round) {
 	const roundEL = document.getElementById('round');
@@ -866,6 +1022,14 @@ function updateRound(round) {
 	roundEL.textContent = round; //change the actual text
 	resizeText(roundEL); //resize it if it overflows
 }
+
+function updateRoundBRB(roundBRB){
+	const roundBRBEL = document.getElementById('roundBRB');
+	roundBRBEL.style.fontSize = brbRoundSize;
+	roundBRBEL.textContent = roundBRB;
+	resizeText(roundBRBEL);
+}
+
 
 function updateTournament(tournamentName){
 	const tournEL = document.getElementById('tournamentName');
