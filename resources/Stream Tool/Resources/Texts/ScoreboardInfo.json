@@ -1,16 +1,18 @@
 {
-  "p1Name": "kally",
+  "p1Name": "",
   "p1Team": "",
   "p1Pic": "",
   "p1Score": 0,
   "p1WL": "Nada",
-  "p2Name": "jaquarium",
+  "p1StarCount": "7",
+  "p2Name": "",
   "p2Team": "",
   "p2Pic": "",
   "p2Score": 0,
   "p2WL": "Nada",
-  "bestOf": "Bo3",
-  "round": "round info",
+  "p2StarCount": "7",
+  "bestOf": "Bo5",
+  "round": "",
   "tournamentName": "",
   "caster1Name": "",
   "caster1Bluesky": "",
@@ -22,6 +24,6 @@
   "caster3Bluesky": "",
   "caster3Twitch": "",
   "timerStatus": false,
-  "theme": "",
-  "brb": true
+  "theme": "ttt",
+  "brb": false
 }

@@ -18,6 +18,12 @@ let movedStageStriker = false;
 const wlButtons1 = document.getElementById("wlButtons1");
 const wlButtons2 = document.getElementById('wlButtons2');
 
+const p1StarAdd = document.getElementById('p1StarAdd');
+const p1StarRemove = document.getElementById('p1StarRemove');
+
+const p2StarAdd = document.getElementById('p2StarAdd');
+const p2StarRemove = document.getElementById('p2StarRemove');
+
 const viewport = document.getElementById('viewport');
 
 const p1NameInp = document.getElementById('p1Name');
@@ -53,6 +59,9 @@ const p1W = document.getElementById('p1W');
 const p1L = document.getElementById('p1L');
 const p2W = document.getElementById('p2W');
 const p2L = document.getElementById('p2L');
+
+const p1StarCount = document.getElementById('p1Stars');
+const p2StarCount = document.getElementById('p2Stars');
 
 const roundInp = document.getElementById('roundName');
 
@@ -140,7 +149,11 @@ function init() {
     p2W.addEventListener("click", setWLP2);
     p2L.addEventListener("click", setWLP2);
 
-
+    // Listener for star counter buttons
+    p1StarAdd.addEventListener("click", addStarP1);
+    p1StarRemove.addEventListener("click", removeStarP1);
+    p2StarAdd.addEventListener("click", addStarP2);
+    p2StarRemove.addEventListener("click", removeStarP2);
 
     // Check player names for skin
     p1NameInp.addEventListener("input", resizeInput);
@@ -698,6 +711,30 @@ function deactivateWL() {
     }
 }
 
+function addStarP1() {
+    if(p1StarCount.value < 7){
+        p1StarCount.value = String(Number(p1StarCount.value) + 1);
+    }
+}
+
+function removeStarP1() {
+    if(p1StarCount.value > 0){
+        p1StarCount.value = String(Number(p1StarCount.value) - 1);
+    }
+}
+
+function addStarP2() {
+    if(p2StarCount.value < 7){
+        p2StarCount.value = String(Number(p2StarCount.value) + 1);
+    }
+}
+
+function removeStarP2() {
+    if(p2StarCount.value > 0){
+        p2StarCount.value = String(Number(p2StarCount.value) - 1);
+    }
+}
+
 function forceWLtoggles() {
     const wlButtons = document.getElementsByClassName("wlButtons");
 
@@ -781,7 +818,7 @@ function changeBRB(){
     let prevBRBStatus;
     if(this == document.getElementById("brb")) {
         prevBRBStatus = document.getElementById("back");
-        currentTheme = '';
+        currentTheme = 'ttt';
         currentBRB = true;
     } else {
         prevBRBStatus = document.getElementById("brb");
@@ -857,6 +894,10 @@ function swap() {
     currentP1WL = currentP2WL;
     currentP2WL = tempP1WL;
 
+    tempP1StarCount = p1StarCount.value;
+    p1StarCount.value = p2StarCount.value;
+    p2StarCount.value = tempP1StarCount;
+
     if (currentP1WL != "Nada" && currentP2WL != "Nada") {
         updatePlayerStyles(currentP1WL, p1W, p1L);
         updatePlayerStyles(currentP2WL, p2W, p2L);
@@ -926,6 +967,9 @@ function clearPlayers() {
     resetPlayerStyles(p2W, p2L);
     currentP1WL = "Nada";
     currentP2WL = "Nada";
+
+    p1StarCount.value = 7;
+    p2StarCount.value = 7;
 }
 
 function setScore(score, tick1, tick2, tick3) {
@@ -983,11 +1027,12 @@ function writeScoreboard() {
                 p1Pic: p1File ? p1File.lastModified : "",
                 p1Score: checkScore(p1Win1, p1Win2, p1Win3),
                 p1WL: currentP1WL,
-                p2Name: p2NameInp.value,
+                p1StarCount: p1StarCount.value,                p2Name: p2NameInp.value,
                 p2Team: p2TagInp.value,
                 p2Pic: p2File ? p2File.lastModified : "",
                 p2Score: checkScore(p2Win1, p2Win2, p2Win3),
                 p2WL: currentP2WL,
+                p2StarCount: p2StarCount.value,
                 bestOf: currentBestOf,
                 round: roundInp.value,
                 tournamentName: document.getElementById('tournamentName').value,
