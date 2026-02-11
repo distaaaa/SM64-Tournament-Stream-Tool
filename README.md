@@ -12,7 +12,7 @@
 
 Planned Features:
 - Customization options such as but not limited to: background color, background animation presets, ability to import custom elements to be used in background animation (like the stage icons packaged with app), font...
-- Stage Striking functions/visualizer for Tangerine Tango style events
+- Stage Striking functions/visualizer for Stage RTA focused events.
 - therungg integration (live comparison and showing which runner is ahead and by how much)
 
 Big thanks to RONC3NA, EgregiousDI, and fmx, who have helped in countless ways over the development of this project.
